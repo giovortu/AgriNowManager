@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriNow devices</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <style>
+    .device-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .edit-btn, .delete-btn {
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    table {
+      width: 100%;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+
+    .btn-container {
+      text-align: right;
+    }
+  </style>
+</head>
+<body class="container">
+  <h1>AgriNow devices</h1>
+  <div class="btn-container">
+    <a class="waves-effect waves-light btn" onclick="addDevice()">Add Device</a>
+  </div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>MQTT Topic</th>
+      <th>Friendly Name</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% devices.forEach(device => { %>
+      <tr data-id="<%= device.id %>">
+        <td><%= device.id %></td>
+        <td><%= device.topic %></td>
+        <td><%= device.name %></td>
+        <td>
+          <a class="waves-effect waves-light btn-small edit-btn" onclick="editDevice('<%= device.id %>', '<%= device.topic %>', '<%= device.name %>')">Edit</a>
+          <a class="waves-effect waves-light btn-small red delete-btn" onclick="showDeleteConfirmation('<%= device.id %>')">Delete</a>
+        </td>
+      </tr>
+    <% }); %>
+  </tbody>
+</table>
+
+
+  <div id="addForm" class="modal">
+    <div class="modal-content">
+      <h4>Add Device</h4>
+      <form action="/add" method="post" id="newDeviceForm">
+        <div class="input-field">
+          <input id="id" type="text" name="id" class="validate" required>
+          <label for="id">ID</label>
+        </div>
+        <div class="input-field">
+          <input id="topic" type="text" name="topic" class="validate" required>
+          <label for="topic">MQTT Topic</label>
+        </div>
+        <div class="input-field">
+          <input id="name" type="text" name="name" class="validate" required>
+          <label for="name">Friendly Name</label>
+        </div>
+        <button class="waves-effect waves-light btn" type="submit" id="newDeviceBtn" disabled>Add Device</button>
+      </form>
+    </div>
+  </div>
+
+    <div id="editForm" class="modal">
+    <div class="modal-content">
+      <h4>Add Device</h4>
+      <form action="/edit" method="post" id="editDeviceForm">
+        <div class="input-field">
+          <input type="hidden" id="origid" name="origid">
+          <input id="editid" type="text" name="editid" class="validate" value="" required>
+          <label for="editid">ID</label>
+        </div>
+        <div class="input-field">
+          <input id="edittopic" type="text" name="edittopic" class="validate" required>
+          <label for="edittopic">MQTT Topic</label>
+        </div>
+        <div class="input-field">
+          <input id="editname" type="text" name="editname" class="validate" required>
+          <label for="editname">Friendly Name</label>
+        </div>
+        <button class="waves-effect waves-light btn" type="submit" id="editDeviceBtn" disabled>Modify Device</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Structure for Delete Confirmation -->
+<div id="confirmDeleteModal" class="modal">
+  <div class="modal-content">
+    <h4>Confirm Deletion</h4>
+    <p>Are you sure you want to delete this device?</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancel</a>
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat confirm-delete-btn">Confirm</a>
+  </div>
+</div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    M.Modal.init(document.getElementById('addForm'));
+    M.Modal.init(document.getElementById('editForm'));
+    M.Modal.init(document.getElementById('confirmDeleteModal'));
+
+    const newDeviceForm = document.getElementById('newDeviceForm');
+    const newDeviceBtn = document.getElementById('newDeviceBtn');
+
+    newDeviceForm.addEventListener('input', function () {
+    console.log("newDeviceForm" )
+      // Check if the form is valid
+      const isValid = newDeviceForm.checkValidity();
+
+      // Enable or disable the "Save" button based on form validity
+      newDeviceBtn.disabled = !isValid;
+    });
+
+    const editDeviceForm = document.getElementById('editDeviceForm');
+    const editDeviceBtn = document.getElementById('editDeviceBtn');
+
+    editDeviceForm.addEventListener('input', function () {
+    console.log("editDeviceForm" )
+      // Check if the form is valid
+      const isValid = editDeviceForm.checkValidity();
+
+      // Enable or disable the "Save" button based on form validity
+      editDeviceBtn.disabled = !isValid;
+    });
+
+  });
+
+  function showDeleteConfirmation(id) {
+    const confirmDeleteModal = M.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+    const confirmButton = confirmDeleteModal.el.querySelector('.confirm-delete-btn');
+
+    confirmButton.onclick = function () {
+      deleteDevice(id);
+      confirmDeleteModal.close();
+    };
+
+    confirmDeleteModal.open();
+  }
+
+  function addDevice() {
+    M.Modal.getInstance(document.getElementById('addForm')).open();
+  }
+
+  function editDevice(id, topic, name) {
+
+    console.log( id, topic, name )
+
+    input = document.getElementById('editid')
+    input.value = id
+
+    input = document.getElementById('edittopic')
+    input.value = topic
+
+    input = document.getElementById('editname')
+    input.value = name
+
+
+    input = document.getElementById('origid')
+    input.value = id
+
+    M.updateTextFields();
+
+    const editDeviceForm = document.getElementById('editDeviceForm');
+    const editDeviceBtn = document.getElementById('editDeviceBtn');
+
+    const isValid = editDeviceForm.checkValidity();
+    editDeviceBtn.disabled = !isValid;
+
+
+    M.Modal.getInstance(document.getElementById('editForm')).open();
+
+  }
+
+  function deleteDevice(id) {
+    // Implement delete logic here
+    const deleteForm = document.createElement('form');
+    deleteForm.setAttribute('action', '/remove');
+    deleteForm.setAttribute('method', 'post');
+
+    const idInput = document.createElement('input');
+    idInput.setAttribute('type', 'text');
+    idInput.setAttribute('name', 'id');
+    idInput.value = id;
+    idInput.style.display = 'none';
+    deleteForm.appendChild(idInput);
+
+    document.body.appendChild(deleteForm);
+    deleteForm.submit();
+  }
+</script>
+
+
+</body>
+</html>
