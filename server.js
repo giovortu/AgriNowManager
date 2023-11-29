@@ -18,6 +18,19 @@ app.set('view engine', 'ejs'); // Set EJS as the template engine
 app.set('views', __dirname + '/views'); // Set the views directory
 
 
+function removeFirstLine(inputString) {
+  // Split the string into an array of lines
+  const lines = inputString.split('\n');
+
+  // Remove the first line using slice (or splice)
+  lines.splice(0, 1);
+
+  // Join the remaining lines to form the new string
+  const resultString = lines.join('\n');
+
+  return resultString;
+}
+
 
 app.get('/', async (req, res) => {
   try {
@@ -131,7 +144,12 @@ app.get('/devices', async (req, res) => {
 
       array.push( obj );
 
-      const yamlPart = yaml.dump(array);
+      let sensor = { "sensor": array }
+
+      const yamlPart = yaml.dump(sensor, { "forceQuotes": true});
+
+
+
 
       yamlData = yamlData + "################# " +  device.name + " #################\n\n" + yamlPart + "\n";
 
@@ -218,7 +236,7 @@ app.post('/save-settings', async (req, res) => {
     }
 
     // Save the data as JSON
-    await fs.writeFile( path.join(__dirname, 'settings.json'), JSON.stringify(topicPrefix, null, 2), 'utf-8');
+    await fs.writeFile( path.join(__dirname, '/data/settings.json'), JSON.stringify(topicPrefix, null, 2), 'utf-8');
 
     res.json({ success: true, message: 'Data saved successfully' });
   } catch (error) {
@@ -231,7 +249,7 @@ app.post('/save-settings', async (req, res) => {
 app.get('/get-settings', async (req, res) => {
   try {
     // Read settings from settings.json
-    const settingsData = await fs.readFile(path.join(__dirname, 'settings.json'), 'utf-8');
+    const settingsData = await fs.readFile(path.join(__dirname, '/data/settings.json'), 'utf-8');
     const settings = JSON.parse(settingsData);
 
     res.json(settings);
