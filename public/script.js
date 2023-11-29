@@ -1,3 +1,6 @@
+
+let settingsData = {};
+
 document.addEventListener('DOMContentLoaded', function() {
     M.Modal.init(document.getElementById('addForm'));
     M.Modal.init(document.getElementById('editForm'));
@@ -45,6 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Enable or disable the "Save" button based on form validity
         saveSettingsBtn.disabled = !isValid;
       });
+
+      fetchSettings();
 
   });
 
@@ -131,6 +136,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function openSettings()
   {
+    input = document.getElementById('topic_prefix')
+    input.value = settingsData.topic_prefix;
+
+    const saveSettingsForm = document.getElementById('saveSettingsForm');
+    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+
+    const isValid = saveSettingsForm.checkValidity();
+    saveSettingsBtn.disabled = !isValid;
+
+    M.updateTextFields();
+
     M.Modal.getInstance(document.getElementById('settingsForm')).open();
   }
   async function downloadConfiguration()
@@ -193,4 +209,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     M.Modal.getInstance(document.getElementById('settingsForm')).close();
     M.Modal.getInstance(document.getElementById('resultPopup')).open();
+  }
+
+
+  async function fetchSettings() {
+    try {
+      const response = await fetch('/get-settings'); // Replace with your server URL
+      settingsData = await response.json();
+
+      console.log ( settingsData );
+
+
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    }
   }

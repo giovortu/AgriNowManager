@@ -76,11 +76,22 @@ app.get('/devices', async (req, res) => {
   try {
     const devices = await readDevices();
     const array = [];
+
+    const settingsData = await fs.readFile(path.join(__dirname, 'settings.json'), 'utf-8');
+    const settings = JSON.parse(settingsData);
+
+    let prefix = settings.topic_prefix;
+    if (!prefix || !prefix.endsWith("/")){
+      prefix = prefix + "/";
+    } 
+
+    let yamlData = "";
+
     devices.forEach(device => { 
       obj = {};
       obj.name = "Temperatura " + device.name;
       obj.unique_id = device.id + "_temperature";
-      obj.state_topic = device.topic;
+      obj.state_topic =  prefix + device.topic;
       obj.unit_of_measurement = "°C";
       obj.device_class = "temperature";
       obj.value_template = "{{ value_json.value }}";
@@ -91,7 +102,7 @@ app.get('/devices', async (req, res) => {
 
       obj.name = "Suolo " + device.name;
       obj.unique_id = device.id + "_soil_moisture";
-      obj.state_topic = device.topic;
+      obj.state_topic = prefix + device.topic;
       obj.unit_of_measurement = "%";
       obj.device_class = "moisture";
       obj.value_template = "{{ value_json.value }}";
@@ -102,9 +113,9 @@ app.get('/devices', async (req, res) => {
 
       obj.name = "Luminosita " + device.name;
       obj.unique_id = device.id + "_luminosity";
-      obj.state_topic = device.topic;
+      obj.state_topic = prefix +  device.topic;
       obj.unit_of_measurement = "lumen";
-      obj.device_class = "luminosity";
+      obj.device_class = "illuminance";
       obj.value_template = "{{ value_json.value }}";
 
       array.push( obj );
@@ -113,16 +124,22 @@ app.get('/devices', async (req, res) => {
 
       obj.name = "Livello Batteria " + device.name;
       obj.unique_id = device.id + "_battery_level";
-      obj.state_topic = device.topic;
+      obj.state_topic = prefix + device.topic;
       obj.unit_of_measurement = "%";
       obj.device_class = "battery";
       obj.value_template = "{{ value_json.value }}";
 
       array.push( obj );
 
+      const yamlPart = yaml.dump(array);
+
+      yamlData = yamlData + "################# " +  device.name + " #################\n\n" + yamlPart + "\n";
+
+
+
     });
 
-    const yamlData = yaml.dump(array);
+    
 
     res.header('Content-Type', 'text/yaml');
     res.send(yamlData);
@@ -201,8 +218,6 @@ app.post('/save-settings', async (req, res) => {
     }
 
     // Save the data as JSON
-    console.log( topicPrefix )
-
     await fs.writeFile( path.join(__dirname, 'settings.json'), JSON.stringify(topicPrefix, null, 2), 'utf-8');
 
     res.json({ success: true, message: 'Data saved successfully' });
@@ -211,6 +226,21 @@ app.post('/save-settings', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+// Endpoint to get settings
+app.get('/get-settings', async (req, res) => {
+  try {
+    // Read settings from settings.json
+    const settingsData = await fs.readFile(path.join(__dirname, 'settings.json'), 'utf-8');
+    const settings = JSON.parse(settingsData);
+
+    res.json(settings);
+  } catch (error) {
+    console.error('Error reading settings:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 async function readDevices() {
   try {
