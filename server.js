@@ -2,15 +2,20 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs/promises');
 const ejs = require('ejs');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
 const JSON_FILE_PATH = 'data/devices.json';
 
+app.use('/', express.static(path.join(__dirname, '/public/')));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.set('view engine', 'ejs'); // Set EJS as the template engine
 app.set('views', __dirname + '/views'); // Set the views directory
+
+
 
 app.get('/', async (req, res) => {
   try {
