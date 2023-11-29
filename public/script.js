@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
     M.Modal.init(document.getElementById('editForm'));
     M.Modal.init(document.getElementById('confirmDeleteModal'));
 
+    M.Modal.init(document.getElementById('aboutForm'));
+    M.Modal.init(document.getElementById('settingsForm'));
+
+    M.Modal.init(document.getElementById('resultPopup'));
+    
+
     const newDeviceForm = document.getElementById('newDeviceForm');
     const newDeviceBtn = document.getElementById('newDeviceBtn');
 
@@ -26,6 +32,19 @@ document.addEventListener('DOMContentLoaded', function() {
       // Enable or disable the "Save" button based on form validity
       editDeviceBtn.disabled = !isValid;
     });
+
+
+    const saveSettingsForm= document.getElementById('saveSettingsForm');
+    const saveSettingsBtn= document.getElementById('saveSettingsBtn');
+
+    saveSettingsForm.addEventListener('input', function () {
+      console.log("saveSettingsBtn" )
+        // Check if the form is valid
+        const isValid = saveSettingsForm.checkValidity();
+  
+        // Enable or disable the "Save" button based on form validity
+        saveSettingsBtn.disabled = !isValid;
+      });
 
   });
 
@@ -104,7 +123,74 @@ document.addEventListener('DOMContentLoaded', function() {
     deleteForm.submit();
   }
 
-  function downloadConfiguration()
+  function openPopup()
   {
+    M.Modal.getInstance(document.getElementById('aboutForm')).open();
+  }
 
+
+  function openSettings()
+  {
+    M.Modal.getInstance(document.getElementById('settingsForm')).open();
+  }
+  async function downloadConfiguration()
+  {
+  try {
+          // Fetch data from the server (replace the URL with your actual server endpoint)
+          const response = await fetch('/devices');
+          const yamlData = await response.text();
+
+          // Create Blob and download link
+          const blob = new Blob([yamlData], { type: 'text/yaml' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'devices.yaml';
+  
+          // Trigger download
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        } catch (error) {
+          console.error('Error fetching or processing data:', error);
+        }
+    }
+  
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the side navigation (mobile menu)
+    const elems = document.querySelectorAll('.sidenav');
+    const instances = M.Sidenav.init(elems);
+  });
+
+  async function submitSettingsForm() {
+    const topicPrefix = document.getElementById('topic_prefix').value;
+
+    try {
+      const response = await fetch('/save-settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ "topic_prefix": topicPrefix }),
+      });
+
+      console.log( response );
+
+      if (response.ok) {
+        // Show success popup
+        document.getElementById('resultPopupText').innerHTML = 'Setting saved!';
+      } else {
+        // Show error popup
+        document.getElementById('resultPopupText').innerHTML = 'Error saving settings!';
+      }
+
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      // Show error popup
+      document.getElementById('resultPopupText').innerHTML = 'Error submitting form:'+ error;
+    }
+    M.Modal.getInstance(document.getElementById('settingsForm')).close();
+    M.Modal.getInstance(document.getElementById('resultPopup')).open();
   }

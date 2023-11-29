@@ -6,6 +6,7 @@
   <title>AgriNow devices</title>
 
   <link rel="stylesheet" href="/materialize.min.css">
+  <link rel="stylesheet" href="/materialdesignicons.min.css">
   <link rel="stylesheet" href="/style.css">
 
     <script src="jquery-3.3.1.min.js"></script>
@@ -14,7 +15,23 @@
 </head>
 <body class="container">
   <div class="watermark"></div>
-  <h1>AgriNow devices </h1>
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo"> AgriNow devices</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="mdi mdi-menu"></i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#" onclick="openSettings()">Settings</a></li>
+        <li><a href="#" onclick="openPopup()">About</a></li>
+        
+      </ul>
+    </div>
+  </nav>
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="#" onclick="openSettings()">Settings</a></li>
+    <li><a href="#" onclick="openPopup()">About</a></li>
+  </ul>
+
+
   <div class="btn-container">
     <a class="waves-effect waves-light btn" onclick="addDevice()">Add Device</a>
     <a class="waves-effect waves-light btn" onclick="downloadConfiguration()">Download</a>
@@ -22,42 +39,130 @@
 <table>
   <thead>
     <tr>
+      <th>Num</th>
       <th>ID</th>
       <th>MQTT Topic</th>
       <th>Friendly Name</th>
-      <th>Action</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <% devices.forEach(device => { %>
-      <tr data-id="<%= device.id %>">
-        <td><%= device.id %></td>
-        <td><%= device.topic %></td>
-        <td><%= device.name %></td>
-        <td>
-          <a class="waves-effect waves-light btn-small edit-btn" onclick="editDevice('<%= device.id %>', '<%= device.topic %>', '<%= device.name %>')">Edit</a>
-          <a class="waves-effect waves-light btn-small red delete-btn" onclick="showDeleteConfirmation('<%= device.id %>')">Delete</a>
-        </td>
-      </tr>
-    <% }); %>
+    <% count = ( currentPage -1 ) * 5; %>
+  <% devices.forEach(device => { %>
+    <% count++; %>
+    <tr data-id="<%= device.id %>">
+      <td><%= count %></td>
+      <td><%= device.id %></td>
+      <td><%= device.topic %></td>
+      <td><%= device.name %></td>
+      <td>
+        <a class="waves-effect waves-light btn-small edit-btn" onclick="editDevice('<%= device.id %>', '<%= device.topic %>', '<%= device.name %>')">Edit</a>
+        <a class="waves-effect waves-light btn-small red delete-btn" onclick="showDeleteConfirmation('<%= device.id %>')">Delete</a>
+      </td>
+    </tr>
+  <% }); %>
   </tbody>
 </table>
 
+<div class="pagination-wrapper" >
+
+<ul class="pagination">
+  <% if (totalPages > 1) { %>
+    <!-- First Page Button -->
+    <li class="<%= currentPage === 1 ? 'disabled' : '' %>">
+      <a href="<%= currentPage === 1 ? '#' : '/?page=1' %>"><i class="mdi mdi-page-first"></i></a>
+    </li>
+
+    <!-- Previous Page Button -->
+    <li class="<%= currentPage === 1 ? 'disabled' : '' %>">
+      <a href="<%= currentPage === 1 ? '#' : '/?page=' + (currentPage - 1) %>"><i class="mdi mdi-chevron-left"></i></a>
+    </li>
+    <!-- Display 5 Pages -->
+    <% for (let i = startPage; i <= endPage; i++) { %>
+      <li class="<%= i === currentPage ? 'active' : '' %>">
+        <a href="/?page=<%= i %>"><%= i %></a>
+      </li>
+    <% } %>
+
+    <!-- Next Page Button -->
+    <li class="<%= currentPage === totalPages ? 'disabled' : '' %>">
+      <a href="<%= currentPage === totalPages ? '#' : '/?page=' + (currentPage + 1) %>"> <i class="mdi mdi-chevron-right"></i></a>
+    </li>
+
+    <!-- Last Page Button -->
+    <li class="<%= currentPage === totalPages ? 'disabled' : '' %>">
+      <a href="<%= currentPage === totalPages ? '#' : '/?page=' + totalPages %>"><i class="mdi mdi-page-last"></i></a>
+    </li>
+  <% } %>
+</ul>
+
+</div>
+
+<div id="settingsForm" class="modal">
+  <div class="modal-content">
+    <h4>Settings</h4>
+    <form action="/save-settings" method="post" id="saveSettingsForm" autocomplete="off">
+      <div class="input-field">
+        <input id="topic_prefix" type="text" name="topic_prefix" class="validate" required>
+        <label for="topic_prefix">Topic prefix</label>
+      </div>
+    <button class="waves-effect waves-light btn" type="button" onclick="submitSettingsForm()" id="saveSettingsBtn" disabled>Save</button>
+  </form>
+  </div>
+</div>
+
+
+<div id="resultPopup" class="modal">
+  <div class="modal-content">
+    <h4>Result</h4>
+    <div id="resultPopupText">
+
+    </div>
+    <p>
+      </p>
+      <a href="#!" class="modal-close waves-effect waves-green btn">close</a>
+    </div>
+</div>
+
+
+<div id="aboutForm" class="modal">
+  <div class="modal-content">
+    <h4>About</h4>
+    <p>
+      Author: Giovanni Ortu<br>
+      Email: giovortu@gmail.com</a><br>
+      Website: <a href="https://www.giovanniortu.it" target="_blank">www.giovanniortu.it</a>
+    </p>
+    <p>
+      This program is licensed under the <a href="https://www.gnu.org/licenses/lgpl-3.0.html" target="_blank">GNU Lesser General Public License v3</a>.
+    </p>
+    <p>
+      This is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+    </p>
+    <p>
+      This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+    </p>
+    <p>
+      You should have received a copy of the GNU Lesser General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/" target="_blank">https://www.gnu.org/licenses/</a>.
+    </p>
+    <a href="#!" class="modal-close waves-effect waves-green btn">close</a>
+    </div>
+</div>
 
   <div id="addForm" class="modal">
     <div class="modal-content">
       <h4>Add Device</h4>
       <form action="/add" method="post" id="newDeviceForm" autocomplete="off">
         <div class="input-field">
-          <input id="id" type="text" name="id" id="id" class="validate" required>
+          <input id="id" type="text" name="id"  class="validate" required>
           <label for="id">ID</label>
         </div>
         <div class="input-field">
-          <input id="topic" type="text" name="topic" id="topic" class="validate" required>
+          <input id="topic" type="text" name="topic"  class="validate" required>
           <label for="topic">MQTT Topic</label>
         </div>
         <div class="input-field">
-          <input id="name" type="text" name="name" id="name" class="validate" required>
+          <input id="name" type="text" name="name" class="validate" required>
           <label for="name">Friendly Name</label>
         </div>
         <button class="waves-effect waves-light btn" type="submit" id="newDeviceBtn" disabled>Add Device</button>

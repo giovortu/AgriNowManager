@@ -23,6 +23,38 @@
     text-align: right;
   }
 
+  .btn-container{
+  margin-top:10px;
+}
+
+.pagination-wrapper{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-top:10px;
+}
+
+.brand-logo {
+
+  margin-left:20px;
+
+}
+
+
+  
+.pagination li
+{
+  vertical-align: middle;
+  padding:0px 5px 0px 5px;
+
+  border:1px solid red;
+  border-radius: 3px;;
+}
+
+.hidden{
+  opacity:0;
+  display:none;
+}
 
   .watermark {
     position:fixed;
