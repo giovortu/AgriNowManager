@@ -65,17 +65,17 @@
   <div id="addForm" class="modal">
     <div class="modal-content">
       <h4>Add Device</h4>
-      <form action="/add" method="post" id="newDeviceForm">
+      <form action="/add" method="post" id="newDeviceForm" autocomplete="off">
         <div class="input-field">
-          <input id="id" type="text" name="id" class="validate" required>
+          <input id="id" type="text" name="id" id="id" class="validate" required>
           <label for="id">ID</label>
         </div>
         <div class="input-field">
-          <input id="topic" type="text" name="topic" class="validate" required>
+          <input id="topic" type="text" name="topic" id="topic" class="validate" required>
           <label for="topic">MQTT Topic</label>
         </div>
         <div class="input-field">
-          <input id="name" type="text" name="name" class="validate" required>
+          <input id="name" type="text" name="name" id="name" class="validate" required>
           <label for="name">Friendly Name</label>
         </div>
         <button class="waves-effect waves-light btn" type="submit" id="newDeviceBtn" disabled>Add Device</button>
@@ -86,7 +86,7 @@
     <div id="editForm" class="modal">
     <div class="modal-content">
       <h4>Add Device</h4>
-      <form action="/edit" method="post" id="editDeviceForm">
+      <form action="/edit" method="post" id="editDeviceForm" autocomplete="off">
         <div class="input-field">
           <input type="hidden" id="origid" name="origid">
           <input id="editid" type="text" name="editid" class="validate" value="" required>
@@ -164,6 +164,18 @@
   }
 
   function addDevice() {
+
+    input = document.getElementById('id')
+    input.value = ""
+
+    input = document.getElementById('topic')
+    input.value = ""
+
+    input = document.getElementById('name')
+    input.value = ""
+
+    M.updateTextFields();
+
     M.Modal.getInstance(document.getElementById('addForm')).open();
   }
 
