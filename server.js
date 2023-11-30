@@ -90,7 +90,7 @@ app.get('/devices', async (req, res) => {
     const devices = await readDevices();
     const array = [];
 
-    const settingsData = await fs.readFile(path.join(__dirname, 'settings.json'), 'utf-8');
+    const settingsData = await fs.readFile(path.join(__dirname, '/data/settings.json'), 'utf-8');
     const settings = JSON.parse(settingsData);
 
     let prefix = settings.topic_prefix;

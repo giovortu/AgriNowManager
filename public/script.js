@@ -149,6 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     M.Modal.getInstance(document.getElementById('settingsForm')).open();
   }
+
   async function downloadConfiguration()
   {
   try {
@@ -160,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
           const blob = new Blob([yamlData], { type: 'text/yaml' });
           const a = document.createElement('a');
           a.href = URL.createObjectURL(blob);
-          a.download = 'devices.yaml';
+          a.download = 'sensor.yaml';
   
           // Trigger download
           document.body.appendChild(a);
