@@ -102,10 +102,12 @@
   <div class="modal-content">
     <h4>Settings</h4>
     <form action="/save-settings" method="post" id="saveSettingsForm" autocomplete="off">
+
       <div class="input-field">
         <input id="topic_prefix" type="text" name="topic_prefix" class="validate" required>
         <label for="topic_prefix">Topic prefix</label>
       </div>
+
     <button class="waves-effect waves-light btn" type="button" onclick="submitSettingsForm()" id="saveSettingsBtn" disabled>Save</button>
   </form>
   </div>

@@ -88,7 +88,7 @@ app.get('/devices', async (req, res) => {
   
   try {
     const devices = await readDevices();
-    const array = [];
+    
 
     const settingsData = await fs.readFile(path.join(__dirname, '/data/settings.json'), 'utf-8');
     const settings = JSON.parse(settingsData);
@@ -100,8 +100,12 @@ app.get('/devices', async (req, res) => {
 
     let yamlData = "";
 
-    devices.forEach(device => { 
+    devices.forEach(device => {     
+      
+      let array = [];
+
       obj = {};
+
       obj.name = "Temperatura " + device.name;
       obj.unique_id = device.id + "_temperature";
       obj.state_topic =  prefix + device.topic;
@@ -146,12 +150,9 @@ app.get('/devices', async (req, res) => {
 
       let sensor = { "sensor": array }
 
-      const yamlPart = yaml.dump(sensor, { "forceQuotes": true});
+      yamlPart = yaml.dump(sensor, { "forceQuotes": true});
 
-
-
-
-      yamlData = yamlData + "################# " +  device.name + " #################\n\n" + yamlPart + "\n";
+      yamlData += "################# " +  device.name + " #################\n\n" + yamlPart + "\n";
 
 
 
