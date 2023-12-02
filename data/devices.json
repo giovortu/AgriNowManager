@@ -1,37 +1,32 @@
 [
   {
     "id": "3398534",
-    "topic": "pomodori",
+    "topic": "3398534",
     "name": "Pomodori"
   },
   {
     "id": "3398804",
-    "topic": "peperoni",
+    "topic": "3398804",
     "name": "Peperoni"
   },
   {
     "id": "3398655",
-    "topic": "pothos",
+    "topic": "3398655",
     "name": "Pothos"
   },
   {
     "id": "3398774",
-    "topic": "ficus",
+    "topic": "3398774",
     "name": "Ficus"
   },
   {
     "id": "2548419",
-    "topic": "dieffenbachia",
+    "topic": "2548419",
     "name": "Dieffenbachia"
   },
   {
-    "id": "807D3A26E3FA",
-    "topic": "rosemary",
-    "name": "Rosmarino"
-  },
-  {
-    "id": "807D3A26E592",
-    "topic": "patate",
+    "id": "2549138",
+    "topic": "2549138",
     "name": "Patate"
   }
 ]

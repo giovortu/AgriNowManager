@@ -108,10 +108,10 @@ app.get('/devices', async (req, res) => {
 
       obj.name = "Temperatura " + device.name;
       obj.unique_id = device.id + "_temperature";
-      obj.state_topic =  prefix + device.topic;
+      obj.state_topic =  prefix + device.topic + "/temperature";
       obj.unit_of_measurement = "°C";
       obj.device_class = "temperature";
-      obj.value_template = "{{ value_json.value }}";
+      obj.value_template = "{{value_json.value}}";
 
       array.push( obj );
       
@@ -119,10 +119,10 @@ app.get('/devices', async (req, res) => {
 
       obj.name = "Suolo " + device.name;
       obj.unique_id = device.id + "_soil_moisture";
-      obj.state_topic = prefix + device.topic;
+      obj.state_topic = prefix + device.topic + "/soil_moisture";
       obj.unit_of_measurement = "%";
       obj.device_class = "moisture";
-      obj.value_template = "{{ value_json.value }}";
+      obj.value_template = "{{value_json.value}}";
 
       array.push( obj );
 
@@ -130,10 +130,10 @@ app.get('/devices', async (req, res) => {
 
       obj.name = "Luminosita " + device.name;
       obj.unique_id = device.id + "_luminosity";
-      obj.state_topic = prefix +  device.topic;
+      obj.state_topic = prefix +  device.topic + "/luminosity";
       obj.unit_of_measurement = "lumen";
       obj.device_class = "illuminance";
-      obj.value_template = "{{ value_json.value }}";
+      obj.value_template = "{{value_json.value}}";
 
       array.push( obj );
 
@@ -141,10 +141,10 @@ app.get('/devices', async (req, res) => {
 
       obj.name = "Livello Batteria " + device.name;
       obj.unique_id = device.id + "_battery_level";
-      obj.state_topic = prefix + device.topic;
+      obj.state_topic = prefix + device.topic + "/battery_level";
       obj.unit_of_measurement = "%";
       obj.device_class = "battery";
-      obj.value_template = "{{ value_json.value }}";
+      obj.value_template = "{{value_json.value}}";
 
       array.push( obj );
 
