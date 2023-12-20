@@ -43,6 +43,7 @@
       <th>Hardware ID</th>
       <th>MQTT Topic</th>
       <th>Friendly Name</th>
+      <th>Update (sec)</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -55,8 +56,9 @@
       <td><%= device.id %></td>
       <td><%= device.topic %></td>
       <td><%= device.name %></td>
+      <td><%= device.interval %></td>
       <td>
-        <a class="waves-effect waves-light btn-small edit-btn" onclick="editDevice('<%= device.id %>', '<%= device.topic %>', '<%= device.name %>')">Edit</a>
+        <a class="waves-effect waves-light btn-small edit-btn" onclick="editDevice('<%= device.id %>', '<%= device.topic %>', '<%= device.name %>', '<%= device.interval %>')">Edit</a>
         <a class="waves-effect waves-light btn-small red delete-btn" onclick="showDeleteConfirmation('<%= device.id %>')">Delete</a>
       </td>
     </tr>
@@ -167,6 +169,10 @@
           <input id="name" type="text" name="name" class="validate" required>
           <label for="name">Friendly Name</label>
         </div>
+        <div class="input-field">
+          <input id="interval" type="text" name="interval" class="validate" required>
+          <label for="interval">Update (sec)</label>
+        </div>        
         <button class="waves-effect waves-light btn" type="submit" id="newDeviceBtn" disabled>Add Device</button>
       </form>
     </div>
@@ -189,6 +195,10 @@
           <input id="editname" type="text" name="editname" class="validate" required>
           <label for="editname">Friendly Name</label>
         </div>
+        <div class="input-field">
+          <input id="editinterval" type="text" name="editinterval" class="validate" required>
+          <label for="editinterval">Update (sec)</label>
+        </div>            
         <button class="waves-effect waves-light btn" type="submit" id="editDeviceBtn" disabled>Modify Device</button>
       </form>
     </div>

@@ -76,12 +76,15 @@ document.addEventListener('DOMContentLoaded', function() {
     input = document.getElementById('name')
     input.value = ""
 
+    input = document.getElementById('interval')
+    input.value = ""
+
     M.updateTextFields();
 
     M.Modal.getInstance(document.getElementById('addForm')).open();
   }
 
-  function editDevice(id, topic, name) {
+  function editDevice(id, topic, name, interval) {
 
     console.log( id, topic, name )
 
@@ -94,6 +97,8 @@ document.addEventListener('DOMContentLoaded', function() {
     input = document.getElementById('editname')
     input.value = name
 
+    input = document.getElementById('editinterval')
+    input.value = interval
 
     input = document.getElementById('origid')
     input.value = id

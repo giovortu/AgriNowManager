@@ -2,31 +2,43 @@
   {
     "id": "3398534",
     "topic": "3398534",
-    "name": "Pomodori"
+    "name": "Pomodori",
+    "interval": 45
   },
   {
     "id": "3398804",
     "topic": "3398804",
-    "name": "Peperoni"
+    "name": "Peperoni",
+    "interval": 45
   },
   {
     "id": "3398655",
     "topic": "3398655",
-    "name": "Pothos"
+    "name": "Pothos",
+    "interval": 20
   },
   {
     "id": "3398774",
     "topic": "3398774",
-    "name": "Ficus"
+    "name": "Ficus",
+    "interval": 20
   },
   {
     "id": "2548419",
     "topic": "2548419",
-    "name": "Dieffenbachia"
+    "name": "Dieffenbachia",
+    "interval": 20
   },
   {
     "id": "2549138",
     "topic": "2549138",
-    "name": "Patate"
+    "name": "Patate",
+    "interval": 45
+  },
+  {
+    "id": "3398543",
+    "topic": "3398543",
+    "name": "Cipolle",
+    "interval": 10
   }
 ]

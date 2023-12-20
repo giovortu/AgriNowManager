@@ -172,7 +172,11 @@ app.get('/devices', async (req, res) => {
 app.post('/add', async (req, res) => {
   try {
     const devices = await readDevices();
-    const newDevice = { id: req.body.id, topic: req.body.topic, name: req.body.name };
+    const newDevice = { id: req.body.id, 
+                        topic: req.body.topic, 
+                        name: req.body.name, 
+                        interval: parseInt( req.body.interval )
+                      };
     devices.push(newDevice);
     await writeDevices(devices);
     res.redirect('/');
@@ -189,10 +193,13 @@ app.post('/edit', async (req, res) => {
     const deviceIdToEdit = req.body.origid;
     const newDeviceID = req.body.editid;
     const updatedDevices = devices.map(device => {
+
       if (device.id === deviceIdToEdit) {
         device.id = newDeviceID;
         device.topic = req.body.edittopic;
         device.name = req.body.editname;
+        device.interval = parseInt( req.body.editinterval );
+
       }
 
 
