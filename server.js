@@ -131,7 +131,7 @@ app.get('/devices', async (req, res) => {
       obj.name = "Luminosita " + device.name;
       obj.unique_id = device.id + "_luminosity";
       obj.state_topic = prefix +  device.topic + "/luminosity";
-      obj.unit_of_measurement = "lumen";
+      obj.unit_of_measurement = "lx";
       obj.device_class = "illuminance";
       obj.value_template = "{{value_json.value}}";
 

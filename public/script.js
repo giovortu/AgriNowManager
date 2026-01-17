@@ -2,14 +2,23 @@
 let settingsData = {};
 
 document.addEventListener('DOMContentLoaded', function() {
-    M.Modal.init(document.getElementById('addForm'));
-    M.Modal.init(document.getElementById('editForm'));
-    M.Modal.init(document.getElementById('confirmDeleteModal'));
+    const modalOptions = {
+        dismissible: true,
+        opacity: 0.5,
+        inDuration: 250,
+        outDuration: 250,
+        startingTop: '4%',
+        endingTop: '10%'
+    };
+    
+    M.Modal.init(document.getElementById('addForm'), modalOptions);
+    M.Modal.init(document.getElementById('editForm'), modalOptions);
+    M.Modal.init(document.getElementById('confirmDeleteModal'), modalOptions);
 
-    M.Modal.init(document.getElementById('aboutForm'));
-    M.Modal.init(document.getElementById('settingsForm'));
+    M.Modal.init(document.getElementById('aboutForm'), modalOptions);
+    M.Modal.init(document.getElementById('settingsForm'), modalOptions);
 
-    M.Modal.init(document.getElementById('resultPopup'));
+    M.Modal.init(document.getElementById('resultPopup'), modalOptions);
     
 
     const newDeviceForm = document.getElementById('newDeviceForm');
