@@ -34,5 +34,11 @@
     "topic": "2549138",
     "name": "Patate",
     "interval": 45
+  },
+  {
+    "id": "3399181",
+    "topic": "3399181",
+    "name": "Pothos 2",
+    "interval": 3600
   }
 ]
