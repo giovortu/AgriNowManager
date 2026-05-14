@@ -151,8 +151,8 @@ app.get('/devices', async (req, res) => {
       obj = {};
 
       obj.name = "In carica " + device.name;
-      obj.unique_id = device.id + "_charging";
-      obj.state_topic = prefix + device.topic + "/charging";
+      obj.unique_id = device.id + "_is_battery_charging ";
+      obj.state_topic = prefix + device.topic + "/is_battery_charging ";
       obj.unit_of_measurement = "";
       obj.device_class = "battery";
       obj.value_template = "{{value_json.value}}";
