@@ -154,7 +154,7 @@ app.get('/devices', async (req, res) => {
       obj.unique_id = device.id + "_is_battery_charging ";
       obj.state_topic = prefix + device.topic + "/is_battery_charging ";
       obj.unit_of_measurement = "";
-      obj.device_class = "battery_charging";
+      obj.device_class = "battery";
       obj.value_template = "{{value_json.value}}";
 
       array.push( obj );
@@ -162,6 +162,7 @@ app.get('/devices', async (req, res) => {
       let sensor = { "sensor": array }
 
       yamlPart = yaml.dump(sensor, { "forceQuotes": true});
+      
 
       yamlData += "################# " +  device.name + " #################\n\n" + yamlPart + "\n";
 
